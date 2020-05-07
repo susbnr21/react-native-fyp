@@ -55,6 +55,12 @@ const Truck = (props) => {
                         </Image>
                     </Button>
 
+                    <View style={{margin: 10}}/>
+
+                    <Button mode ="contained" onPress={()=> props.navigation.navigate("Map")}>
+                        Map
+                    </Button>
+
                     <View style={{margin: 20}}/>
 
                 </View>

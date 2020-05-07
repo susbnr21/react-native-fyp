@@ -16,11 +16,14 @@ const Btruck = (props) => {
     const[weight,setWeight] = useState('6500-8400 lbs');
     const[truck_space,setTruck_space] = useState('1400-1600 cubic feet');
     const[capacity_furniture,setCapacity_furniture] = useState('1-20 medium furniture');
-    const[capacity_box,setCapacity_box] = useState('upto 550 medium box')
+    const[capacity_box,setCapacity_box] = useState('upto 550 medium box');
+    const[worker,setWorker] = useState('');
+    const[boxes,setBoxes] = useState('');
+    const[extra,setExtra] = useState('');
 
     //For Posting Data in Database
     const sendCred = async (props) => {
-        fetch("https://96adb41d.ngrok.io/truck", {
+        fetch("https://ebdae235.ngrok.io/truck", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -35,7 +38,10 @@ const Btruck = (props) => {
                 "weight": weight,
                 "truck_space": truck_space,
                 "capacity_furniture": capacity_furniture,
-                "capacity_box": capacity_box
+                "capacity_box": capacity_box,
+                "worker": worker,
+                "boxes": boxes,
+                "extra": extra
             })
         })
         .then(res=>res.text())
@@ -52,7 +58,7 @@ const Btruck = (props) => {
     //For Getting the name of the user
     const Boiler = async () => {
         const token = await AsyncStorage.getItem("token")
-        fetch('https://96adb41d.ngrok.io', {
+        fetch('https://ebdae235.ngrok.io', {
             headers: new Headers({
                 Authorization: "Bearer "+ token
             })

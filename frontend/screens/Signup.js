@@ -14,7 +14,7 @@ const Signup = (props) => {
     const [password, setPassword] = useState('')
 
     const sendCred = async (props) => {
-        fetch("https://96adb41d.ngrok.io/signup", {
+        fetch("https://ebdae235.ngrok.io/signup", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
