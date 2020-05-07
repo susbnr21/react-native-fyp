@@ -9,10 +9,10 @@ const Truck = mongoose.model('Truck');
 router.post('/truck', async (req,res)=>{
 
   const {name,contact,address_from,address_to,truck_size,
-        description,weight,truck_space,capacity_furniture,capacity_box} = req.body;
+        description,weight,truck_space,capacity_furniture,capacity_box,worker,boxes,extra} = req.body;
   try{
     const truck = new Truck({name,contact,address_from,address_to,truck_size,
-    description,weight,truck_space,capacity_furniture,capacity_box});
+    description,weight,truck_space,capacity_furniture,capacity_box,worker,boxes,extra});
     await truck.save();
     const token = jwt.sign({truckId:truck._id},jwtkey)
     res.send({token})
