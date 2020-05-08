@@ -3,20 +3,10 @@ import { Text, View, StyleSheet, ImageBackground, Image, ScrollView, Alert, Pick
 import { Button } from 'react-native-paper';
 
 const Map = () => {
-    const [selectedValue, setSelectedValue] = useState("java");
 
     return(
         <ImageBackground source={require('../assets/grey.jpg')} style={styles.container}>
-            <View style={styles.container}>
-            <Picker
-                selectedValue={selectedValue}
-                style={{ height: 50, width: 150 }}
-                onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-            >
-                <Picker.Item label="Java" value="java" />
-                <Picker.Item label="JavaScript" value="js" />
-            </Picker>
-            </View>
+            
         </ImageBackground>
     )
 }

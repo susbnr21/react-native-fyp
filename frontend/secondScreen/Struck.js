@@ -23,7 +23,7 @@ const Struck = (props) => {
 
     //For Posting Data in Database
     const sendCred = async (props) => {
-        fetch("https://ebdae235.ngrok.io/truck", {
+        fetch("https://f6169df3.ngrok.io/truck", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -47,7 +47,8 @@ const Struck = (props) => {
         .then(res=>res.text())
         .then(async ()=>{
             try{
-                props.navigation.navigate("Map")
+                // await AsyncStorage.setItem('token',data.token)
+                props.navigation.replace("Map")
             } catch (e) {
                 console.log("It is an error", e)
                 Alert(e)
@@ -58,7 +59,7 @@ const Struck = (props) => {
     //For Getting the name of the user
     const Boiler = async () => {
         const token = await AsyncStorage.getItem("token")
-        fetch('https://ebdae235.ngrok.io', {
+        fetch('https://f6169df3.ngrok.io', {
             headers: new Headers({
                 Authorization: "Bearer "+ token
             })
@@ -73,23 +74,34 @@ const Struck = (props) => {
         Boiler()
     },[])
 
-    //For alert message
-    const Message = () => {
-        Alert.alert(
-            "Confirmation",
-            "Submit the Information?",
-            [
-              {
-                text: "Cancel",
-                onPress: () => console.log("Cancel Pressed"),
-                style: "cancel"
-              },
-              { text: "OK", onPress: () => sendCred(props)}
-            ],
-            { cancelable: false }
-        );
+    // For TextInput Validation and Sending Credentials
+    const Warning = () => {
+        if(contact != ''){
+            if(address_from !=''){
+                if(address_to != '') {
+                    Alert.alert(
+                        "Confirmation",
+                        "Submit the Information?",
+                        [
+                          {
+                            text: "Cancel",
+                            onPress: () => console.log("Cancel Pressed"),
+                            style: "cancel"
+                          },
+                          { text: "OK", onPress: () => sendCred(props)}
+                        ],
+                        { cancelable: false }
+                    );
+                } else {
+                    alert('Please Give Your Address You Are Going To!');
+                }
+            } else {
+                alert('Please Give Your Address You Are Shifting From!');
+            }
+        } else {
+            alert('Please Give Your Contact!');
+        }
     }
-    // , onPress:()=> props.navigation.navigate("Map")
 
     return(
         <ImageBackground source={require('../assets/grey.jpg')} style={styles.container}>
@@ -194,7 +206,7 @@ const Struck = (props) => {
                 <View style={{margin: 5}}/>
 
                 <View style={styles.button}>
-                    <Button mode="contained" onPress={Message} style={{marginTop: 20}}>
+                    <Button mode="contained" onPress={Warning} style={{marginTop: 20}}>
                         Submit
                     </Button>
                     <Button mode="contained" onPress={()=> props.navigation.replace("Truck")} color="red" style={{marginTop: 20, marginLeft: 50}}>
