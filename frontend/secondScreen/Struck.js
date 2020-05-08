@@ -209,7 +209,7 @@ const Struck = (props) => {
                     <Button mode="contained" onPress={Warning} style={{marginTop: 20}}>
                         Submit
                     </Button>
-                    <Button mode="contained" onPress={()=> props.navigation.replace("Truck")} color="red" style={{marginTop: 20, marginLeft: 50}}>
+                    <Button mode="contained" onPress={()=> props.navigation.navigate("Truck")} color="red" style={{marginTop: 20, marginLeft: 50}}>
                         Cancel
                     </Button>
                 </View>
