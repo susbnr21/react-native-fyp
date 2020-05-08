@@ -14,7 +14,10 @@ const Signup = (props) => {
     const [password, setPassword] = useState('')
 
     const sendCred = async (props) => {
-        fetch("https://f6169df3.ngrok.io/signup", {
+      if (name != ''){
+        if (email != ''){
+          if (password != ''){
+            fetch("https://f6169df3.ngrok.io/signup", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -27,13 +30,22 @@ const Signup = (props) => {
         })
         .then(res=>res.json())
         .then(async (data)=>{
-                try {
-                    await AsyncStorage.setItem('token',data.token)
-                    props.navigation.replace("Home")
-                } catch (e) {
-                    console.log("It is an error",e)
-                }
-        })
+              try {
+                  await AsyncStorage.setItem('token',data.token)
+                  props.navigation.replace("Home")
+              } catch (e) {
+                  console.log("It is an error",e)
+              }
+            })
+          } else {
+            alert('Password is Required!!!')
+          }
+        } else {
+          alert('Email is Required!!!')
+        }
+      } else {
+        alert('Your Name is Required!!!')
+      }
     }
 
     return(
