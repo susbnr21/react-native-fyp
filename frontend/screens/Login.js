@@ -16,7 +16,7 @@ const Login = (props) => {
     const sendCred = async (props) => {
       if (email != '') {
         if (password != '') {
-          fetch("https://f6169df3.ngrok.io/signin", {
+          fetch("https://fe0dc0bf.ngrok.io/signin", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -33,7 +33,8 @@ const Login = (props) => {
                 props.navigation.replace("Home")
             } catch (e) {
                 console.log("It is an error",e)
-                Alert(e)
+                // Alert(e)
+                alert(e)
             }
           })
         } else {

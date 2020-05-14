@@ -12,31 +12,37 @@ const Signup = (props) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('')
+    const [password2, setPassword2] = useState('')
 
     const sendCred = async (props) => {
       if (name != ''){
         if (email != ''){
           if (password != ''){
-            fetch("https://f6169df3.ngrok.io/signup", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body:JSON.stringify({
-                "name":name,
-                "email":email,
-                "password":password
-            })
-        })
-        .then(res=>res.json())
-        .then(async (data)=>{
-              try {
-                  await AsyncStorage.setItem('token',data.token)
-                  props.navigation.replace("Home")
-              } catch (e) {
-                  console.log("It is an error",e)
-              }
-            })
+            if (password2 != ''){
+              fetch("https://fe0dc0bf.ngrok.io/signup", {
+              method: "POST",
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body:JSON.stringify({
+                  "name":name,
+                  "email":email,
+                  "password":password
+              })
+          })
+          .then(res=>res.json())
+          .then(async (data)=>{
+                try {
+                    await AsyncStorage.setItem('token',data.token)
+                    props.navigation.replace("Home")
+                } catch (e) {
+                    console.log("It is an error",e)
+                    alert(e)
+                }
+              })
+            } else {
+              alert('Confirm Password is Required!!!')
+            }
           } else {
             alert('Password is Required!!!')
           }
@@ -87,6 +93,15 @@ const Signup = (props) => {
               autoCapitalize={false}
               style={{width: 300}}
               onChangeText={(text)=> setPassword(text)}
+            />
+            <TextInput
+              label="Confirm Password"
+              mode="outlined"
+              value={password2}
+              secureTextEntry={true}
+              autoCapitalize={false}
+              style={{width: 300}}
+              onChangeText={(text)=> setPassword2(text)}
             />
             <Button mode="contained" onPress={() => sendCred(props)} style={{marginTop: 20}}>
               Register
