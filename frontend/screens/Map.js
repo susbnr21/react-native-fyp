@@ -1,13 +1,22 @@
-import React, {useEffect, useState} from 'react';
-import { Text, View, StyleSheet, ImageBackground, Image, ScrollView, Alert, Picker } from 'react-native';
-import { Button } from 'react-native-paper';
+import React from 'react';
+import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import { View, StyleSheet } from 'react-native';
 
 const Map = () => {
 
     return(
-        <ImageBackground source={require('../assets/grey.jpg')} style={styles.container}>
-            
-        </ImageBackground>
+        <View style={styles.container}>
+            <MapView
+                provider={PROVIDER_GOOGLE}
+                style={styles.map}
+                region={{
+                    latitude: 28.3949,
+                    longitude: 84.1240,
+                    latitudeDelta: 0.09,
+                    longitudeDelta: 0.035
+                }}
+            />
+        </View>
     )
 }
 
@@ -18,10 +27,9 @@ const styles = StyleSheet.create({
       alignItems: 'center'
     },
 
-    logo: {
-        width: 150,
-        height: 150,
-    },
+    map: {
+        height: '100%'
+    }
 })
 
 export default Map;
