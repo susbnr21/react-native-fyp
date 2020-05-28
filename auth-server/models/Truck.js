@@ -4,6 +4,10 @@ const TruckSchema = new mongoose.Schema({
     name: {
         type: String,
     },
+    email: {
+        type: String,
+        required: true
+    },
     contact: {
         type: String,
         required: true

@@ -19,7 +19,7 @@ const Signup = (props) => {
         if (email != ''){
           if (password != ''){
             if (password2 != ''){
-              fetch("https://53de3a3f.ngrok.io/signup", {
+              fetch("https://67ce04c81658.ngrok.io/signup", {
               method: "POST",
               headers: {
                   'Content-Type': 'application/json'

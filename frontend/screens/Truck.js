@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import { Text, View, StyleSheet, ImageBackground, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-paper';
 
@@ -18,6 +18,12 @@ const Truck = (props) => {
                     <View style={{margin: 8}}/>
 
                     <Text style={{fontSize: 22, fontWeight: 'bold'}}>Select Your Vehicle Size 🚛</Text>
+
+                    <View style={{margin: 8}}/>
+
+                    <Button mode ="contained" color="brown" onPress={()=> props.navigation.navigate("Price")}>
+                        Press To View The Prices
+                    </Button>
 
                     <View style={{margin: 8}}/>
 
@@ -58,7 +64,13 @@ const Truck = (props) => {
                     <View style={{margin: 10}}/>
 
                     <Button mode ="contained" onPress={()=> props.navigation.navigate("Map")}>
-                        Map
+                        Track Your Belongings
+                    </Button>
+
+                    <View style={{margin: 10}}/>
+
+                    <Button mode ="contained" onPress={()=> props.navigation.navigate("End")}>
+                        End Page
                     </Button>
 
                     <View style={{margin: 20}}/>

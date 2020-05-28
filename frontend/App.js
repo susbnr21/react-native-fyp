@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import { View, StyleSheet} from 'react-native';
 
 //For Navigation
 import 'react-native-gesture-handler';
@@ -16,6 +15,8 @@ import Mtruck from './secondScreen/Mtruck';
 import Ltruck from './secondScreen/Ltruck';
 import Btruck from './secondScreen/Btruck';
 import Map from './screens/Map';
+import Price from './secondScreen/Price';
+import End from './screens/End';
 
 //For Navigation
 import { NavigationContainer } from '@react-navigation/native';
@@ -53,6 +54,8 @@ const App = () => {
         <Stack.Screen name="Ltruck" component={Ltruck} />
         <Stack.Screen name="Btruck" component={Btruck} />
         <Stack.Screen name="Map" component={Map} />
+        <Stack.Screen name="Price" component={Price} />
+        <Stack.Screen name="End" component={End} />
       </Stack.Navigator>
     </NavigationContainer>
   )

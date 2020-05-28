@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 const Mtruck = (props) => {
     const[name,setName] = useState("Loading");
+    const[email,setEmail] =useState('');
     const[contact,setContact] = useState('');
     const[address_from,setAddress_from] = useState('');
     const[address_to,setAddress_to] = useState('');
@@ -23,13 +24,14 @@ const Mtruck = (props) => {
 
     //For Posting Data in Database
     const sendCred = async (props) => {
-        fetch("https://53de3a3f.ngrok.io/truck", {
+        fetch("https://67ce04c81658.ngrok.io/truck", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
             },
             body:JSON.stringify({
                 "name": name,
+                "email": email,
                 "contact":contact,
                 "address_from": address_from,
                 "address_to": address_to,
@@ -58,7 +60,7 @@ const Mtruck = (props) => {
     //For Getting the name of the user
     const Boiler = async () => {
         const token = await AsyncStorage.getItem("token")
-        fetch('https://53de3a3f.ngrok.io', {
+        fetch('https://67ce04c81658.ngrok.io', {
             headers: new Headers({
                 Authorization: "Bearer "+ token
             })
@@ -78,19 +80,23 @@ const Mtruck = (props) => {
         if(contact != ''){
             if(address_from !=''){
                 if(address_to != '') {
-                    Alert.alert(
-                        "Confirmation",
-                        "Submit the Information?",
-                        [
-                          {
-                            text: "Cancel",
-                            onPress: () => console.log("Cancel Pressed"),
-                            style: "cancel"
-                          },
-                          { text: "OK", onPress: () => sendCred(props)}
-                        ],
-                        { cancelable: false }
-                    );
+                    if(email != ''){
+                        Alert.alert(
+                            "Confirmation",
+                            "Submit the Information?",
+                            [
+                              {
+                                text: "Cancel",
+                                onPress: () => console.log("Cancel Pressed"),
+                                style: "cancel"
+                              },
+                              { text: "OK", onPress: () => sendCred(props)}
+                            ],
+                            { cancelable: false }
+                        );
+                    } else {
+                        alert('Please Give Your Email!');
+                    }
                 } else {
                     alert('Please Give Your Address You Are Going To!');
                 }
@@ -185,6 +191,16 @@ const Mtruck = (props) => {
                 <View style={{margin: 10}}/>
 
                 <TextInput
+                    label="Email"
+                    mode="flat"
+                    style={{width: 350}}
+                    value={email}
+                    onChangeText={(text)=> setEmail(text)}
+                />
+
+                <View style={{margin: 10}}/>
+
+                <TextInput
                     label="Address From"
                     mode="flat"
                     style={{width: 350}}
@@ -200,6 +216,42 @@ const Mtruck = (props) => {
                     style={{width: 350}}
                     value={address_to}
                     onChangeText={(text)=> setAddress_to(text)}
+                />
+
+                <View style={{margin: 20}}/>
+
+                <Text style={{fontSize: 15, fontWeight: 'bold', color: "red"}}>Extra Preferences</Text>
+
+                <Text style={{fontSize: 15, fontWeight: 'bold', color: "#B67601"}}>(Note: These optional choices)</Text>
+
+                <View style={{margin: 10}}/>
+
+                <TextInput
+                    label="How many workers do you want?"
+                    mode="outlined"
+                    style={{width: 350}}
+                    value={worker}
+                    onChangeText={(text)=> setWorker(text)}
+                />
+
+                <View style={{margin: 10}}/>
+
+                <TextInput
+                    label="How many boxes do you want?"
+                    mode="outlined"
+                    style={{width: 350}}
+                    value={boxes}
+                    onChangeText={(text)=> setBoxes(text)}
+                />
+
+                <View style={{margin: 10}}/>
+
+                <TextInput
+                    label="Any extra preferences?"
+                    mode="outlined"
+                    style={{width: 350}}
+                    value={extra}
+                    onChangeText={(text)=> setExtra(text)}
                 />
 
                 <View style={{margin: 5}}/>
