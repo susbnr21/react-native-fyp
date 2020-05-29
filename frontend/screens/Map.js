@@ -1,118 +1,177 @@
-import React, {Component} from 'react';
-import MapView, {Marker, Polyline, PROVIDER_GOOGLE} from 'react-native-maps';
-import { View, StyleSheet, Text, Image } from 'react-native';
-import haversine from 'haversine';
-import { Button } from 'react-native-paper';
-
+import React from "react";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  Platform
+} from "react-native";
+import MapView, { Marker, AnimatedRegion, Polyline, PROVIDER_GOOGLE } from "react-native-maps";
+import haversine from "haversine";
 navigator.geolocation = require('@react-native-community/geolocation');
 
+
+// const LATITUDE = 29.95539;
+// const LONGITUDE = 78.07513;
 const LATITUDE_DELTA = 0.009;
 const LONGITUDE_DELTA = 0.009;
-const LATITUDE = 27.7172;
-const LONGITUDE = 85.3240;
+const LATITUDE = 27.7837;
+const LONGITUDE = 85.3570;
 
-class Map extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            latitude: LATITUDE,
-            longitude: LONGITUDE,
-            error: null,
-            routeCoordinates: [],
-            distanceTravelled: 0,  // contain live distance
-            valueprevLatLng: {}  // contain pass lat and lang value
-        };
-    }
+class Map extends React.Component {
+  constructor(props) {
+    super(props);
 
-    getMapRegion = () => ({
-        latitude: this.state.latitude,
-        longitude: this.state.longitude,
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA
-       });
-    
-    calcDistance = newLatLng => {
-        const { prevLatLng } = this.state; 
-        return haversine(prevLatLng, newLatLng) || 0;
-    }
-    
-    componentDidMount() {
-            navigator.geolocation.getCurrentPosition(
-            position => {
-            console.log(position);
-            this.setState({
+    this.state = {
+      latitude: LATITUDE,
+      longitude: LONGITUDE,
+      routeCoordinates: [],
+      distanceTravelled: 0,
+      prevLatLng: {},
+      coordinate: new AnimatedRegion({
+        latitude: LATITUDE,
+        longitude: LONGITUDE,
+        latitudeDelta: 0,
+        longitudeDelta: 0
+      })
+    };
+  }
+
+  componentDidMount() {
+    navigator.geolocation.getCurrentPosition(
+        position => {
+        console.log(position);
+        this.setState({
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
             error: null
-            });
-        },
-    error => this.setState({ error: error.message }),
-        { enableHighAccuracy: true, timeout: 200000, maximumAge: 1000 }
-        );
-        navigator.geolocation.watchPosition(
-            position => {
-                const { latitude, longitude } = position.coords;
-                const { routeCoordinates,distanceTravelled  } = this.state;
-                const newCoordinate = {
-                 latitude,
-                 longitude
-                };
-                this.setState({
-                 latitude,
-                 longitude,
-                 routeCoordinates: routeCoordinates.concat([newCoordinate]),
-                 //distanceTravelled: distanceTravelled + this.calcDistance(newCoordinate),
-                 prevLatLng: newCoordinate
-                });
-             },
-            error => console.log(error),
-            { 
-                enableHighAccuracy: true,
-                timeout: 20000,
-                maximumAge: 1000,
-                distanceFilter: 10
-            }
-        );
-    }
+        });
+    },
+error => this.setState({ error: error.message }),
+    { enableHighAccuracy: true, timeout: 200000, maximumAge: 1000 }
+    );
 
-    
-    
-    render(){
-        return(
-            <View style={styles.container}>
-                <MapView
-                    provider={PROVIDER_GOOGLE}
-                    style={{ ...StyleSheet.absoluteFillObject }}
-                    region={this.getMapRegion()}
-                >
-                    <Polyline coordinates={this.state.routeCoordinates} strokeWidth={5} />
-                    <Marker coordinate={this.getMapRegion()} >
-                        <Image source={require("../assets/truck.png")} style={{ height: 55, width: 55 }} />
-                    </Marker>
-                </MapView>
-                <View style={styles.distanceContainer}>
-                <Text>{parseFloat(this.state.distanceTravelled).toFixed(2)} km</Text>
-                </View>
-            </View>
-        )
-    }
+    const { coordinate } = this.state;
+
+    this.watchID = navigator.geolocation.watchPosition(
+      position => {
+        const { routeCoordinates, distanceTravelled } = this.state;
+        const { latitude, longitude } = position.coords;
+
+        const newCoordinate = {
+          latitude,
+          longitude
+        };
+
+        if (Platform.OS === "android") {
+          if (this.marker) {
+            this.marker._component.animateMarkerToCoordinate(
+              newCoordinate,
+              500
+            );
+          }
+        } else {
+          coordinate.timing(newCoordinate).start();
+        }
+
+        this.setState({
+          latitude,
+          longitude,
+          routeCoordinates: routeCoordinates.concat([newCoordinate]),
+          distanceTravelled:
+            distanceTravelled + this.calcDistance(newCoordinate),
+          prevLatLng: newCoordinate
+        });
+      },
+      error => console.log(error),
+      {
+        enableHighAccuracy: true,
+        timeout: 20000,
+        maximumAge: 1000,
+        distanceFilter: 10
+      }
+    );
+  }
+
+  componentWillUnmount() {
+    navigator.geolocation.clearWatch(this.watchID);
+  }
+
+  getMapRegion = () => ({
+    latitude: this.state.latitude,
+    longitude: this.state.longitude,
+    latitudeDelta: LATITUDE_DELTA,
+    longitudeDelta: LONGITUDE_DELTA
+  });
+
+  calcDistance = newLatLng => {
+    const { prevLatLng } = this.state;
+    return haversine(prevLatLng, newLatLng) || 0;
+  };
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <MapView
+          style={styles.map}
+          provider={PROVIDER_GOOGLE}
+          showUserLocation
+          followUserLocation
+          loadingEnabled
+          region={this.getMapRegion()}
+        >
+          <Polyline coordinates={this.state.routeCoordinates} strokeWidth={5} />
+          <Marker.Animated
+            ref={marker => {
+              this.marker = marker;
+            }}
+            coordinate={this.state.coordinate}
+          />
+        </MapView>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={[styles.bubble, styles.button]}>
+            <Text style={styles.bottomBarContent}>
+              {parseFloat(this.state.distanceTravelled).toFixed(2)} km
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{margin:15}}/>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center'
-    },
-
-    map: {
-        height: '100%'
-    },
-    distanceContainer: {
-        flexDirection: "row",
-        marginVertical: 20,
-        backgroundColor: "transparent"
-    },
-})
+  container: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: "flex-end",
+    alignItems: "center"
+  },
+  map: {
+    ...StyleSheet.absoluteFillObject
+  },
+  bubble: {
+    flex: 1,
+    backgroundColor: "rgba(255,255,255,0.7)",
+    paddingHorizontal: 18,
+    paddingVertical: 12,
+    borderRadius: 20
+  },
+  latlng: {
+    width: 200,
+    alignItems: "stretch"
+  },
+  button: {
+    width: 80,
+    paddingHorizontal: 12,
+    alignItems: "center",
+    marginHorizontal: 10
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    marginVertical: 20,
+    backgroundColor: "transparent"
+  }
+});
 
 export default Map;

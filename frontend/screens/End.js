@@ -7,7 +7,7 @@ const End = (props) => {
         <ImageBackground source={require('../assets/nice.jpg')} style={styles.container}>
             <ScrollView style={styles.scrollView}>
                 <View style={styles.container}>
-                    <View style={{margin: 150}}/>
+                    <View style={{margin: 90}}/>
                     <Image style={styles.logo}
                         source={require('../assets/Logo.png')}>
                     </Image>
