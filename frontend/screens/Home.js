@@ -7,7 +7,7 @@ const Home = (props) => {
     const[name,setName] = useState("Loading")
     const Boiler = async () => {
         const token = await AsyncStorage.getItem("token")
-        fetch('https://8dd3b0b5817c.ngrok.io', {
+        fetch('https://3a6364889a42.ngrok.io', {
             headers: new Headers({
                 Authorization: "Bearer "+ token
             })

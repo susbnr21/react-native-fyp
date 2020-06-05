@@ -24,7 +24,7 @@ const Btruck = (props) => {
 
     //For Posting Data in Database
     const sendCred = async (props) => {
-        fetch("https://8dd3b0b5817c.ngrok.io/truck", {
+        fetch("https://3a6364889a42.ngrok.io/truck", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -60,7 +60,7 @@ const Btruck = (props) => {
     //For Getting the name of the user
     const Boiler = async () => {
         const token = await AsyncStorage.getItem("token")
-        fetch('https://8dd3b0b5817c.ngrok.io', {
+        fetch('https://3a6364889a42.ngrok.io', {
             headers: new Headers({
                 Authorization: "Bearer "+ token
             })
